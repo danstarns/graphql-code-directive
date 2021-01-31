@@ -10,7 +10,7 @@ Its a directive you can use on Fields;
 directive @code(source: String) on FIELD_DEFINITION
 ```
 
-You define Javascript logic in the `source` argument. The source is wrapped in an IFFE & passed into a [https://nodejs.org/api/vm.html](https://nodejs.org/api/vm.html). The code you write supports Promises & you can use dependency injection via the context.
+You define Javascript logic in the `source` argument. The source is wrapped in an IFFE & passed into a [https://nodejs.org/api/vm.html](https://nodejs.org/api/vm.html). Supports Promises & you can use dependency injection via the context.
 
 ## Why
 
@@ -73,21 +73,29 @@ const codeDirective = require("graphql-code-directive");
 
 const typeDefs = `
     type User {
-    	id: ID!
-    	name: String!
-    	password: String! @code(source: """
-    		if(!context.admin){
-    			return null;
-    		}
-    
-    		return rootValue.password;
-    	""")		
+        id: ID!
+        name: String!
+        password: String! 
+            @code(
+                source: 
+                """
+        	    if(!context.admin){
+        	    	return null;
+        	    }
+
+        	    return rootValue.password;
+                """
+            )		
     }
     
     type Query {
-        users: [User] @code(source: """
-    		return [{ id: 1, name: "Dan", password: "letmein" }]
-    	""")		
+        users: [User] 
+            @code(
+                source: 
+                """
+    		    return [{ id: 1, name: "Dan", password: "letmein" }]
+                """
+            )		
     }
 `;
 
@@ -135,7 +143,14 @@ type Query {
 
 ### How to dependency inject ?
 
-Each argument, to the field, is available, as a global, via their name. You can also append the `graphqlCodeDirective` property to the `context` of the execution. Each key on the appended object will be available as a global in the VM.
+The arguments to the Field are available under the global `args` variable. You can also append stuff into the `context` of the execution.
+
+Global values are;
+
+1. `rootValue`
+2. `args`
+3. `context`
+4. `resolveInfo`
 
 ### Is this safe ?
 
