@@ -2,6 +2,10 @@
 
 Use a GraphQL Schema Directive to define Javascript logic, have that logic executed as a resolver.
 
+```
+$ npm i graphql-code-directive
+```
+
 ## What
 
 Its a directive you can use on Fields;
