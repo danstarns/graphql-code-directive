@@ -11,7 +11,7 @@ $ npm i graphql-code-directive
 Its a directive you can use on Fields;
 
 ```graphql
-directive @code(source: String) on FIELD_DEFINITION
+directive @code(source: String!) on FIELD_DEFINITION
 ```
 
 You define Javascript logic in the `source` argument. The source is wrapped in an IFFE & passed into a [https://nodejs.org/api/vm.html](https://nodejs.org/api/vm.html). Supports Promises & you can use dependency injection via the context.
