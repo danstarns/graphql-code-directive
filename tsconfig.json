@@ -1,0 +1,19 @@
+{
+  "exclude": [
+    "./tests/",
+    "./node_modules/",
+    "./dist/"
+  ],
+  "compilerOptions": {
+    "target": "ESNEXT",
+    "module": "commonjs",
+    "outDir": "dist",
+    "rootDir": "src",
+    "allowJs": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
