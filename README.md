@@ -72,23 +72,23 @@ const { ApolloServer } = require("apollo-server");
 const codeDirective = require("graphql-code-directive");
 
 const typeDefs = `
-  type User {
-		id: ID!
-		name: String!
-		password: String! @code(source: """
-			if(!context.admin){
-				return null;
-			}
-
-			return rootValue.password;
-		""")		
-	}
-
-  type Query {
+    type User {
+    	id: ID!
+    	name: String!
+    	password: String! @code(source: """
+    		if(!context.admin){
+    			return null;
+    		}
+    
+    		return rootValue.password;
+    	""")		
+    }
+    
+    type Query {
         users: [User] @code(source: """
-	    	return [{ id: 1, name: "Dan", password: "letmein" }]
-	    """)		
-  }
+    		return [{ id: 1, name: "Dan", password: "letmein" }]
+    	""")		
+    }
 `;
 
 const server = new ApolloServer({
