@@ -77,8 +77,7 @@ const typeDefs = `
         name: String!
         password: String! 
             @code(
-                source: 
-                """
+                source: """
         	    if(!context.admin){
         	    	return null;
         	    }
@@ -91,8 +90,7 @@ const typeDefs = `
     type Query {
         users: [User] 
             @code(
-                source: 
-                """
+                source: """
     		    return [{ id: 1, name: "Dan", password: "letmein" }]
                 """
             )		
