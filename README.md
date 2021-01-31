@@ -161,3 +161,7 @@ Make sure you disable introspection & yes it is safe. You are in control of what
 ### Is it testable ?
 
 Unit testing could become cumbersome, this is because you would have to parse the AST in order to access the `source`. You can however write solid intergration tests, why not checkout [https://www.apollographql.com/docs/apollo-server/testing/testing/](https://www.apollographql.com/docs/apollo-server/testing/testing/) ?
+
+## Licence
+
+This software was made on a sunday afternoon with some beer 🍻 under the MIT licence.
