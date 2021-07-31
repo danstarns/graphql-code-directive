@@ -4,3 +4,4 @@ tests/
 node_modules/
 .eslintrc.json
 tsconfig.json
+examples/

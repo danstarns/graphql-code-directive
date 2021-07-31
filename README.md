@@ -1,14 +1,22 @@
 # graphql-code-directive
 
-Use a GraphQL Schema Directive to define Javascript logic, have that logic executed as a resolver.
+<p align="center">
+  <a href="https://www.npmjs.com/package/graphql-code-directive">
+    <img alt="npm package" src="https://badge.fury.io/js/graphql-code-directive.svg">
+  </a>
+  <a href="https://github.com/danstarns/graphql-code-directive/actions/workflows/npmpublish.yml">
+    <img alt="Publish" src="https://github.com/danstarns/graphql-code-directive/actions/workflows/npmpublish.yml/badge.svg">
+  </a>
+  <a href="https://github.com/danstarns/graphql-code-directive/actions/workflows/nodejs.yml">
+    <img alt="Tests" src="https://github.com/danstarns/graphql-code-directive/actions/workflows/nodejs.yml/badge.svg">
+  </a>
+</p>
 
-```
-$ npm i graphql-code-directive
-```
+Use a GraphQL Schema Directive to define Javascript logic, have that logic executed as a resolver.
 
 ## What
 
-Its a directive you can use on Fields;
+Its a directive you can use on Fields:
 
 ```graphql
 directive @code(source: String!) on FIELD_DEFINITION
@@ -16,129 +24,51 @@ directive @code(source: String!) on FIELD_DEFINITION
 
 You define Javascript logic in the `source` argument. The source is wrapped in an IFFE & passed into a [https://nodejs.org/api/vm.html](https://nodejs.org/api/vm.html). Supports Promises & you can use dependency injection via the context.
 
-## Why
-
-Sometimes you have a really small function, for example - When you want to hide a user password to non-admins;
-
-```js
-const typeDefs = `
-    type User {
-        id: ID
-        name: String!
-        password: String!
-    }
-`;
-
-const resolvers = {
-    User: {
-        password: (rootValue, args, context) => {
-            if (!context.admin) {
-                return null;
-            }
-
-            return rootValue.password;
-        },
-    },
-};
-```
-
-Could you just define this in the Type Definitions ? Would it reduce lots of boiler plate ?
-
-```graphql
-type User {
-    id: ID
-    name: String!
-    password: String!
-        @code(
-            source: """
-            if(!context.admin){
-                return null;
-            }
-
-            return rootValue.password;
-            """
-        )
-}
-```
-
-## How
-
-Installing;
+## Installing
 
 ```bash
-$ npm install graphql-code-directive apollo-server
+$ npm install graphql-code-directive
 ```
 
-Usage;
+## Usage
 
 ```js
 const { ApolloServer } = require("apollo-server");
 const codeDirective = require("graphql-code-directive");
+const fetch = require("node-fetch");
 
 const typeDefs = `
-    type User {
+    type Todo {
         id: ID!
-        name: String!
-        password: String! 
-            @code(
-                source: """
-        	    if(!context.admin){
-        	    	return null;
-        	    }
-
-        	    return rootValue.password;
-                """
-            )		
+        userId: ID!
+        title: String!	
+        completed: Boolean	
     }
-    
+
     type Query {
-        users: [User] 
+        todos: [Todo] 
             @code(
                 source: """
-    		    return [{ id: 1, name: "Dan", password: "letmein" }]
+                const response = await context.fetch('https://jsonplaceholder.typicode.com/todos');
+                return response.json()
                 """
             )		
     }
 `;
 
 const server = new ApolloServer({
-    typeDefs: [codeDirective.typeDefs, typeDefs],
-    schemaDirectives: {
-        code: codeDirective.Directive,
-    },
+  typeDefs: [codeDirective.typeDefs, typeDefs],
+  schemaDirectives: {
+    code: codeDirective.CodeDirective,
+  },
+  context: () => {
+    return {
+      fetch,
+    };
+  },
 });
 
-server.listen().then(({ url }) => {
-    console.log(`🚀 Server ready at ${url}`);
-});
-```
-
-The schema looks a little better with GraphQL highlighting imo 👌
-
-```graphql
-type User {
-    id: ID!
-    name: String!
-    password: String!
-        @code(
-            source: """
-            if(!context.admin){
-            	return null;
-            }
-
-            return rootValue.password;
-            """
-        )
-}
-
-type Query {
-    users: [User]
-        @code(
-            source: """
-            return [{ id: 1, name: "Dan", password: "letmein" }]
-            """
-        )
-}
+server.listen(4000).then(() => console.log("http://localhost:4000"));
 ```
 
 ## FAQ
@@ -160,8 +90,16 @@ Make sure you disable introspection & yes it is safe. You are in control of what
 
 ### Is it testable ?
 
-Unit testing could become cumbersome, this is because you would have to parse the AST in order to access the `source`. You can however write solid intergration tests, why not checkout [https://www.apollographql.com/docs/apollo-server/testing/testing/](https://www.apollographql.com/docs/apollo-server/testing/testing/) ?
+Unit testing could become cumbersome, this is because you would have to parse the definitions into an AST in order to access the `source`. You can however write solid integration tests, why not checkout [https://www.apollographql.com/docs/apollo-server/testing/testing/](https://www.apollographql.com/docs/apollo-server/testing/testing/) ?
+
+### Can I use the new Schema Directives ?
+
+Yes! There are 3 exports:
+
+1. `typeDefs` - A string of the directives type definitions
+2. `CodeDirective` - A legacy `SchemaDirectiveVisitor` that you are most likely to be familiar with
+3. `codeDirective` - A functional approach to schema directives that returns a transformer
 
 ## Licence
 
-This software was made on a sunday afternoon with some beer 🍻 under the MIT licence.
+MIT licence.

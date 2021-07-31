@@ -1,9 +1,5 @@
 {
-  "exclude": [
-    "./tests/",
-    "./node_modules/",
-    "./dist/"
-  ],
+  "exclude": ["./tests/", "./node_modules/", "./dist/", "./examples/"],
   "compilerOptions": {
     "target": "ESNEXT",
     "module": "commonjs",
