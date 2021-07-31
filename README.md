@@ -75,14 +75,18 @@ server.listen(4000).then(() => console.log("http://localhost:4000"));
 
 ### How to dependency inject ?
 
-The arguments to the Field are available under the global `args` variable. You can also append stuff into the `context` of the execution.
+Inside the code source you have access to the four global variables:
 
-Global values are;
+1. rootValue
+2. args
+3. context
+4. resolveInfo
 
-1. `rootValue`
-2. `args`
-3. `context`
-4. `resolveInfo`
+So for example if you were to write a 'Normal' Javascript resolver the variables would map to each argument:
+
+```javascript
+function myResolver(rootValue, args, context, resolveInfo) {}
+```
 
 ### Is this safe ?
 
