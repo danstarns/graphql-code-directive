@@ -1,6 +1,6 @@
 {
   "name": "graphql-code-directive",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Use a GraphQL Schema Directive to define Javascript logic, have that logic executed as a resolver.",
   "main": "dist/index.js",
   "scripts": {
