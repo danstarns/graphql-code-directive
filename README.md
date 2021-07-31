@@ -77,10 +77,10 @@ server.listen(4000).then(() => console.log("http://localhost:4000"));
 
 Inside the code source you have access to the four global variables:
 
-1. rootValue
-2. args
-3. context
-4. resolveInfo
+1. `rootValue`
+2. `args`
+3. `context`
+4. `resolveInfo`
 
 So for example if you were to write a 'Normal' Javascript resolver the variables would map to each argument:
 
