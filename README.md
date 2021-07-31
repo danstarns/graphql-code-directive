@@ -12,7 +12,7 @@
   </a>
 </p>
 
-Use a GraphQL Schema Directive to define Javascript logic, have that logic executed as a resolver.
+Use a GraphQL Schema Directive to define Javascript logic, have that logic executed as a resolver. Checkout the fetch example [here](https://github.com/danstarns/graphql-code-directive/blob/main/examples/fetch.js).
 
 ## What
 
