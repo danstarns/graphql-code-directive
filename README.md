@@ -120,7 +120,7 @@ const { codeDirectiveTypeDefs, codeDirectiveTransformer } = codeDirective();
 
 let schema = makeExecutableSchema({
   typeDefs: [codeDirectiveTypeDefs, typeDefs],
-  resolvers: { Query: { users: () => [{}] } },
+  resolvers: {},
 });
 
 schema = codeDirectiveTransformer(schema);
