@@ -108,7 +108,23 @@ Yes! There are 3 exports:
 
 1. `typeDefs` - A string of the directives type definitions
 2. `CodeDirective` - A legacy `SchemaDirectiveVisitor` that you are most likely to be familiar with
-3. `codeDirective` - A functional approach to schema directives that returns a transformer
+3. `codeDirective` - A functional approach to Schema Directives that returns a transformer
+
+#### Using with new Schema Directives
+
+```js
+const { codeDirective } = require("graphql-code-directive");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
+
+const { codeDirectiveTypeDefs, codeDirectiveTransformer } = codeDirective();
+
+let schema = makeExecutableSchema({
+  typeDefs: [codeDirectiveTypeDefs, typeDefs],
+  resolvers: { Query: { users: () => [{}] } },
+});
+
+schema = codeDirectiveTransformer(schema);
+```
 
 ## Licence
 
